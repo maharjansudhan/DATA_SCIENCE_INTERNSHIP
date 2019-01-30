@@ -1,0 +1,79 @@
+---
+title: "DATA_SCIENCE-INTERN"
+author: "sudhan_maharjan"
+date: "January 30, 2019"
+output: html_document
+---
+
+Forecasting Sentiments
+
+#Get the data from github
+
+```{r}
+#getting the csv data from github
+tweets <- read.csv("https://raw.githubusercontent.com/maharjansudhan/DATA_SCIENCE_INTERNSHIP/master/Tweets.csv", header=TRUE, sep=",")
+
+head(tweets)
+```
+
+```{r}
+summary(tweets$airline_sentiment)
+```
+There are around 9178 negative sentiments passengers have expressed when they were travelling where are around 2363 passengers expressed positive feedbacks and about 3099 passengers expressed neutral sentiments.
+
+It seems like people love to write or express the negative thoughts more than the positive ones.
+
+```{r}
+#VIEW THE DATA AND CREATE NAMES
+str(tweets)
+```
+
+```{r}
+#to check how many candidates were there
+library(dplyr)
+count(tweets, vars = "name")
+
+total_airline <- length(unique(tweets$airline))
+total_airline
+
+```
+
+There are total 14640 passengers who expressed their sentiments when they were travelling on these 6 different airlines.
+
+```{r}
+#to see how many of the participants expressed sentiments
+library(ggplot2)
+qplot(airline_sentiment, data = tweets, fill = airline_sentiment, ylab="Sentiments") + theme(axis.text.x = element_text(angle=60, vjust=0.6))
+
+```
+
+
+
+```{r}
+negative_sentiment <- tweets %>% 
+  select(airline_sentiment, airline)
+
+```
+
+```{r}
+#to see how many of the participants expressed Reasons for negative feedback
+library(ggplot2)
+qplot(negativereason, data = tweets, fill = negativereason, ylab="Reason") + theme(axis.text.x = element_text(angle=60, vjust=0.6))
+
+```
+
+
+
+More than 5500 passengers were didn't want to participate in giving any feedbacks. But mostly people gave negative feedback because they experienced a bad customer service, their luggages were misplaced, they had a late flight, and so on.
+
+```{r}
+#to see airlines with most negative feedback
+library(ggplot2)
+ggplot(tweets, aes(x = airline_sentiment, fill = airline_sentiment)) +
+  geom_bar() + facet_grid(. ~ airline) + theme(axis.text.x = element_text(angle=60, vjust=0.6),
+       plot.margin = unit(c(4,0,4,0), "cm"))
+
+```
+
+The airlines with most negative feedbacks are United Airlines, US Airways, and Ameircan Airlines respectively.
+
